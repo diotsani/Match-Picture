@@ -153,9 +153,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tilePrefab: {fileID: 3213992450808029312, guid: e6a737d11ce551b40811102e6ac2dea5, type: 3}
+  spriteRenderer: {fileID: 3559668517344056939, guid: 7b4f832454709ca4da2e2922a938092f, type: 3}
   _listTile: []
   _sprites: []
   _listSprites: []
+  _firstIndex: 0
   _camera: {fileID: 519420031}
 --- !u!4 &96050329
 Transform:
