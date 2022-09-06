@@ -9,34 +9,36 @@ namespace MatchPicture.Gameplay.Tile
     {
 
         [SerializeField] private TileObject _tilePrefab;
-        [SerializeField] private Sprite[] spriteRenderer;
-
         [SerializeField] private List<TileObject> _listTile;
+
         [SerializeField] private Sprite[] _sprites;
         [SerializeField] private List<Sprite> _listSprites;
+
         [SerializeField] private int _firstIndex;
 
         [SerializeField] private Camera _camera;
+
         private int _row = 6;
         private int _column = 5;
+
+        public bool _isFirst;
+        public bool _isSecond;
+
+        public string firstCheck;
+        public  string secondCheck;
+        [SerializeField] List<TileObject> _tileSelected;
 
         private void Awake()
         {
             _sprites = ThemeDatabase.themeDataInstance.themeSprites;
             _listTile = new List<TileObject>();
             _listSprites = new List<Sprite>();
+            _tileSelected = new List<TileObject>();
 
             AddSprites();
-            CreateTile();
-            Shuffle(_listSprites);
-        }
-        private void Start()
-        {
             
-        }
-        private void Update()
-        {
-            OnMouseClick();
+            ShuffleTile(_listSprites);
+            CreateTile();
         }
         void CreateTile()
         {
@@ -45,17 +47,15 @@ namespace MatchPicture.Gameplay.Tile
             {
                 for (int y = 0; y < _row; y++)
                 {
-                    
                     TileObject tile = Instantiate(_tilePrefab, transform);
                     
                     _listTile.Add(tile);
                     tile.transform.position = new Vector2(x, y);
-
+                    tile.InitTileGroup(this);
                     int indexName = _listTile.Count-1;
                     tile.transform.name = "" + indexName;
-
+                    tile.ChangeSprite(_listSprites[indexName]);
                     
-                    //indexName++;
                 }
             }
             _camera.transform.position = new Vector3(_column / 2, _row / 2, -10f);
@@ -81,7 +81,7 @@ namespace MatchPicture.Gameplay.Tile
         {
             return sprites[Random.Range(0,sprites.Length)];
         }
-        void Shuffle(List<Sprite> list)
+        void ShuffleTile(List<Sprite> list)
         {
             for (int i = 0; i < list.Count; i++)
             {
@@ -92,31 +92,62 @@ namespace MatchPicture.Gameplay.Tile
             }
         }
 
-        private void OnMouseClick()
+        public void CheckMatch(string name,TileObject tileSelect)
         {
-            if(Input.GetMouseButtonDown(0))
+            if(!_isFirst)
             {
-                Vector3 world = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(world, Vector2.zero);
-
-                if (hit.collider != null)
-                {
-                    Debug.Log(hit.collider.gameObject.name);
-                    ClickedSprite(hit);
-                    
-                }
+                _isFirst = true;
+                firstCheck = name;
+                _tileSelected.Add(tileSelect);
             }
-            
+            else if(!_isSecond)
+            {
+                _isSecond = true;
+                secondCheck = name;
+                _tileSelected.Add(tileSelect);
+
+                if (firstCheck == secondCheck)
+                {
+                    Debug.Log("Tile Matched");
+                }
+                else
+                {
+                    Debug.Log("Tile not matched");
+                }
+                StartCoroutine(ResetTile());
+            }
         }
-        void ClickedSprite(RaycastHit2D hit2d)
+        IEnumerator ResetTile()
         {
-            string name = hit2d.transform.name;
-            _firstIndex = int.Parse(name);
-            
-            //_listTile[_firstIndex].GetComponent<SpriteRenderer>().sprite = _listSprites[_firstIndex];
-            _listTile[_firstIndex].transform.GetChild(0).gameObject.SetActive(true);
-            _listTile[_firstIndex].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = _listSprites[_firstIndex];
+            yield return new WaitForSeconds(0.5f);
+            _tileSelected.Clear();
+            _isFirst = _isSecond = false;
         }
+
+        //private void OnMouseClick()
+        //{
+        //    if(Input.GetMouseButtonDown(0))
+        //    {
+        //        Vector3 world = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //        RaycastHit2D hit = Physics2D.Raycast(world, Vector2.zero);
+
+        //        if (hit.collider != null)
+        //        {
+        //            Debug.Log(hit.collider.gameObject.name);
+        //            ClickedSprite(hit);
+        //        }
+        //    }
+            
+        //}
+        //void ClickedSprite(RaycastHit2D hit2d)
+        //{
+        //    string name = hit2d.transform.name;
+        //    _firstIndex = int.Parse(name);
+            
+        //    //_listTile[_firstIndex].GetComponent<SpriteRenderer>().sprite = _listSprites[_firstIndex];
+        //    _listTile[_firstIndex].transform.GetChild(0).gameObject.SetActive(true);
+        //    _listTile[_firstIndex].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = _listSprites[_firstIndex];
+        //}
 
     }
 }

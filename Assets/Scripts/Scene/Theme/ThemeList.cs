@@ -40,13 +40,6 @@ namespace MatchPicture.Theme
 
         void OnClickTheme(ThemeData themeDatas, Button button)
         {
-            //_selectedTheme = button.name;
-            //if(button.name == _selectedTheme)
-            //{
-            //    button.transform.GetChild(0).gameObject.SetActive(true);
-            //}
-            //else
-            //    button.transform.GetChild(0).gameObject.SetActive(false);
             ActivatedChecklist();
             button.transform.GetChild(0).gameObject.SetActive(true);
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7752863944541251619}
   - component: {fileID: 2096331109139619557}
   m_Layer: 0
-  m_Name: TileMatch
+  m_Name: TileChild
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -210,6 +210,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f38f97bd154294f44a5f1840235191b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tileSprite: {fileID: 0}
+  _childSprite: {fileID: 7752863944541251619}
 --- !u!61 &1228258323874252362
 BoxCollider2D:
   m_ObjectHideFlags: 0
